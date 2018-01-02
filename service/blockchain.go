@@ -33,6 +33,26 @@ type Block struct {
 	blockStatus        BlockStatus
 	createdPeerID      string
 	signature          []byte
+	blockHash		   string
+}
+
+
+//@@tested
+func (block Block) toByte() []byte{
+
+	//hashing에 필요한 값은
+	//previousBlockHash
+	//merkleTreeRootHash
+	//timeStamp
+
+	previousBlockHash := []byte(block.previousBlockHash)
+	merkleTreeRootHash := []byte(block.merkleTreeRootHash)
+	timeStamp := []byte(block.timeStamp.String())
+
+	s := append(previousBlockHash,merkleTreeRootHash...)
+	s = append(s,timeStamp...)
+
+	return s
 }
 
 type BlockChain struct {
@@ -41,6 +61,7 @@ type BlockChain struct {
 	Blocks []*Block     //list of bloc
 }
 
+//@@tested
 func CreateNewBlockChain(channelID string,peerId string) *BlockChain{
 
 	var header = ChainHeader{
@@ -50,4 +71,20 @@ func CreateNewBlockChain(channelID string,peerId string) *BlockChain{
 	}
 
 	return &BlockChain{Header:&header,Blocks:make([]*Block,0)}
+}
+
+//not yet
+func (bc *BlockChain)AddBlock(block *Block) (bool, error){
+
+	// block이 confirmed 아닐경우 추가하지 않는다.
+	if block.blockStatus != blockConfirmed{
+		return false, nil
+	}
+
+	//lastBlock := bc.Blocks[len(bc.Blocks)]
+	//hashValue := common.Hashing(block)
+	//
+	//append(bc.Blocks, block)
+
+	return false, nil
 }
