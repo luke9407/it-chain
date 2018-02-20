@@ -16,6 +16,7 @@ It describes the important implementation decisions of the it-chain. Sample code
 4. [Crypto](#Crypto)
 5. [Database](#DB)
 6. [Consensus](#Consesnsus)
+7. [Transaction](#Transaction)
 
 
 
@@ -299,3 +300,14 @@ This propose can be different with the detail implementation.
 [@Junbeomlee](https://github.com/junbeomlee)
 
 [@Hwi Ahn](https://github.com/byron1st)
+
+## Transaction <a name="Transaction"></a>
+Transactions created by users are send to random node. Those transactions are saved in leveldb and periodically sent to leader node. After sending transactions, they are deleted.
+
+### Related config
+- batchTimer.pushPeerTable
+  As described before, transactions are periodically sent to leader node. batchTimer.pushPeerTable defines this period in second.
+
+### Related DB
+- waiting_transaction
+  waiting_transaction table saves all transactions sent to the node. Each transactin's TransactionID is used as key and value is serialized transaction. Every periodic send to leader node, maximum 100 transactions are fetched from database. Transactions are saved and fetched from database in lexicographic order by key.
