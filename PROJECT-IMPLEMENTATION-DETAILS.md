@@ -306,8 +306,10 @@ Transactions created by users are send to random node. Those transactions are sa
 
 ### Related config
 - batchTimer.pushPeerTable
+
   As described before, transactions are periodically sent to leader node. batchTimer.pushPeerTable defines this period in second.
 
 ### Related DB
 - waiting_transaction
+
   waiting_transaction table saves all transactions sent to the node. Each transactin's TransactionID is used as key and value is serialized transaction. Every periodic send to leader node, maximum 100 transactions are fetched from database. Transactions are saved and fetched from database in lexicographic order by key.
